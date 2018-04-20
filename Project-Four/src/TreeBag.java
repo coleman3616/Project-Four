@@ -6,7 +6,7 @@
 
 
 /******************************************************************************
-* This class is a homework assignment;
+
 * An <CODE>TreeBag</CODE> is a collection of int numbers.
 *
 * <dl><dt><b>Limitations:</b> <dd>
