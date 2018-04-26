@@ -20,12 +20,12 @@
 * @version
 *   Jan 24, 2016
 ******************************************************************************/
-public class TreeBag<E extends Comparable> implements Cloneable
+public class TreeBag< E extends Comparable> implements Cloneable
 {
    // The Term E extends Comparable is letting the compiler know that any type
    // used to instantiate E must implement Comparable. i. e. that means that whatever
    // type E is must have a compareTo method so that elements can be compared against one another
-   // This is required becuase we are doing comparisons in our methods
+   // This is required because we are doing comparisons in our methods
 
 
    // Invariant of the TreeBag class:
@@ -33,7 +33,7 @@ public class TreeBag<E extends Comparable> implements Cloneable
    //   2. The instance variable root is a reference to the root of the
    //      binary search tree (or null for an empty tree).
    private BTNode<E> root;   
-
+   private int bagSize;
 
    /**
    * Insert a new element into this bag.
@@ -45,8 +45,37 @@ public class TreeBag<E extends Comparable> implements Cloneable
    *   Indicates insufficient memory a new BTNode.
    **/
    public void add(E element)
+   
    {      
-      // Implemented by student.
+	   BTNode node = new BTNode(element, null, null);
+   
+	   if(root ==null) {
+		  this.root = node;
+	   }else {
+		   insert(root,node);
+	   }
+	  
+      
+   }
+   private void insert(BTNode<E> parent, BTNode<E> child ) {
+	   
+	   if((parent.getData()).compareTo(child.getData())>=0) {
+		   if(parent.getLeft()==null) {
+			   parent.setLeft(child);
+			   this.bagSize++;
+			   
+		   }else {
+			   insert(parent.getLeft(),child);
+		   }	   
+		   
+	   }else{
+		   if(parent.getRight()==null) {
+			   parent.setRight(child);
+			   this.bagSize++;
+		   }else{
+			   insert(parent.getRight(),child);
+		   }   
+	   }
    }
 
    /**
@@ -198,6 +227,50 @@ public class TreeBag<E extends Comparable> implements Cloneable
    {
       // Student will replace this return statement with their own code:
       return null;
+   }
+   
+   public static<E> int numberOfNodes(BTNode<Golfer>source) {
+	   
+	   if(source==null) {
+		  return 0;
+	   }else {   
+		   return 1+numberOfNodes(source.getLeft()) +  numberOfNodes(source.getRight());
+		   
+	   }
+   }
+   
+   public static<E> int height(BTNode<E>source) {
+	   
+	  
+	   if(source==null) {
+		  return -1;
+	   }else { 
+		   
+		   int leftDepth = height(source.getLeft());
+		   int rightDepth = height(source.getRight());
+		   return 1+ Math.max(leftDepth, rightDepth);
+		   
+	   }
+   }
+   public static void main(String []args){
+	   TreeBag t = new TreeBag();
+	   Golfer g1 = new Golfer("c");
+	   Golfer g2 = new Golfer("a");
+	   Golfer g3 = new Golfer("d");
+	   Golfer g4 = new Golfer("s");
+	   Golfer g5 = new Golfer("b");
+	  
+	   t.add(g1);
+	   t.add(g2);
+	   t.add(g3);
+//	   t.add(g4);
+//	   t.add(g5);
+//	   
+	   
+	   t.root.inorderPrint();
+	  
+	  
+	   
    }
       
 }
