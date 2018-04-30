@@ -94,7 +94,7 @@ public class TreeBag< E extends Comparable> implements Cloneable
 	       if (root==null) 
 	    	   return null;
 		   
-		   if (root.getData().compareTo(target)==0) 
+	       else if (root.getData().compareTo(target)==0) 
 		   
 			  return  root.getData();
 		 
@@ -208,7 +208,15 @@ public class TreeBag< E extends Comparable> implements Cloneable
    **/
    public void display()
    {
-      root.inorderPrint();
+	   if (root == null) 
+	   {
+		   throw new IllegalStateException ("Tree is empty");
+	   }
+	   else 
+	   {
+		   root.inorderPrint();
+	   }
+      
       
    } 
      
@@ -336,6 +344,7 @@ public class TreeBag< E extends Comparable> implements Cloneable
    }
   
    public static void main(String []args){
+	   
 	   TreeBag<Golfer> t = new TreeBag<Golfer>();
 	   Golfer g6 = new Golfer("b");
 	   Golfer g7 = new Golfer("b");
