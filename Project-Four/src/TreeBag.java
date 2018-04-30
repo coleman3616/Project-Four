@@ -33,7 +33,7 @@ public class TreeBag< E extends Comparable> implements Cloneable
    //   2. The instance variable root is a reference to the root of the
    //      binary search tree (or null for an empty tree).
    private BTNode<E> root;   
-   private int bagSize;
+ 
 
    /**
    * Insert a new element into this bag.
@@ -62,7 +62,6 @@ public class TreeBag< E extends Comparable> implements Cloneable
 	   if((parent.getData()).compareTo(child.getData())>=0) {
 		   if(parent.getLeft()==null) {
 			   parent.setLeft(child);
-			   this.bagSize++;
 			   
 		   }else {
 			   insert(parent.getLeft(),child);
@@ -71,7 +70,6 @@ public class TreeBag< E extends Comparable> implements Cloneable
 	   }else{
 		   if(parent.getRight()==null) {
 			   parent.setRight(child);
-			   this.bagSize++;
 		   }else{
 			   insert(parent.getRight(),child);
 		   }   
@@ -90,12 +88,49 @@ public class TreeBag< E extends Comparable> implements Cloneable
    *   the method returns null.
    *   The bag remains unchanged.
    **/
-   public E retrieve(E target)
-   {
-      // Student will replace this return statement with their own code:
-      return target;
-   }
+   
+   public E retrieveRecursively(BTNode<E>root,E target)
+   {      
+	       if (root==null) 
+	    	   return null;
+		   
+		   if (root.getData().compareTo(target)==0) 
+		   
+			  return  root.getData();
+		 
+		   else if (root.getData().compareTo(target)>0) 
+			      
+			  return  retrieveRecursively(root=root.getLeft(),target);
+		
+		   else		  
+			  return  retrieveRecursively(root=root.getRight(),target);	   
+	   
+	   }
+   
+   
 
+   public E retrieve(E target)
+   {      
+	   
+	   BTNode <E>currentNode= root;
+	   
+	   while (currentNode != null) {
+		   
+		   if (currentNode.getData().compareTo(target)==0) 
+		   
+			   return  currentNode.getData();
+		 
+		   if (currentNode.getData().compareTo(target)>0) 
+	  
+				   currentNode=currentNode.getLeft();
+		
+		   if (currentNode.getData().compareTo(target)<0) 
+			  
+				   currentNode=currentNode.getRight();
+			  
+	   }
+	   return null;
+   }
    
    /**
    * Remove one copy of a specified element from this bag.
@@ -108,8 +143,57 @@ public class TreeBag< E extends Comparable> implements Cloneable
    **/
    public boolean remove(E target)
    {
-      // Student will replace this return statement with their own code:
-      return false;
+      BTNode<E>cursor= root;
+      BTNode<E>parentOfCursor=null;
+      
+      while(cursor!= null&&!(cursor.getData().compareTo(target)==0)) {
+    	  
+    	  if (cursor.getData().compareTo(target)>0) 
+    	  {
+    		  parentOfCursor = cursor;
+    		  cursor = cursor.getLeft();
+    	  }
+    	  if (cursor.getData().compareTo(target)<0) 
+    	  {
+    		  parentOfCursor = cursor;
+    		  cursor = cursor.getRight();
+    	  } 
+      
+      }
+      if(cursor == null) 
+      {					//target not found;
+    	  return false;
+      }
+      else if(cursor==root&&cursor.getLeft()==null)  // target is at the root, with no left child 
+      {
+    	  root= root.getRight();
+    	  return true;
+      }
+      else if(cursor.getLeft()==null) 				// target if not at the root, but has no left child 
+      {	 
+    	 if(parentOfCursor.getRight()==cursor)
+    	 {
+    		 parentOfCursor.setRight(cursor.getRight());    	
+    		 return true;
+    	 }
+    	 else
+    	 {
+    		 parentOfCursor.setLeft(cursor.getRight());    	
+    		 return true;
+    		 
+    	 }
+    	
+      
+      }
+      else if(cursor.getRight()!=null)
+      {
+    	  cursor.setData(cursor.getLeft().getRightmostData());
+    	  cursor.setLeft(cursor.getLeft().removeRightmost());
+    	  return true;
+    	  
+      }
+  
+        return false;
    }
    
    /**
@@ -124,7 +208,7 @@ public class TreeBag< E extends Comparable> implements Cloneable
    **/
    public void display()
    {
-      // Student will replace this with their own code:
+      root.inorderPrint();
       
    } 
      
@@ -240,37 +324,47 @@ public class TreeBag< E extends Comparable> implements Cloneable
    }
    
    public static<E> int height(BTNode<E>source) {
-	   
-	  
+	 
 	   if(source==null) {
 		  return -1;
-	   }else { 
-		   
+	   }else { 		   
 		   int leftDepth = height(source.getLeft());
 		   int rightDepth = height(source.getRight());
-		   return 1+ Math.max(leftDepth, rightDepth);
-		   
+		   return 1+ Math.max(leftDepth, rightDepth);  
 	   }
+	   
    }
+  
    public static void main(String []args){
-	   TreeBag t = new TreeBag();
+	   TreeBag<Golfer> t = new TreeBag<Golfer>();
+	   Golfer g6 = new Golfer("b");
+	   Golfer g7 = new Golfer("b");
 	   Golfer g1 = new Golfer("c");
 	   Golfer g2 = new Golfer("a");
 	   Golfer g3 = new Golfer("d");
 	   Golfer g4 = new Golfer("s");
 	   Golfer g5 = new Golfer("b");
-	  
+	   Golfer g8 = new Golfer("f");
+	   Golfer g9 = new Golfer("h");
 	   t.add(g1);
 	   t.add(g2);
 	   t.add(g3);
-//	   t.add(g4);
-//	   t.add(g5);
-//	   
-	   
-	   t.root.inorderPrint();
+	   t.add(g4);
+	   t.add(g5);
+	   t.add(g6);
+	   t.add(g7);
+	   t.add(g8);
+	   t.add(g9);
+	
+	  Golfer g = new Golfer("f");
+	  t.display();
+	  //System.out.println(t.remove(g5));
+	   System.out.println(t.retrieveRecursively(t.root, g8));
+	   t.display();
+	  //System.out.println("Root"+t.root.getData());
+	  //System.out.println("Left"+t.root.getLeft().getData());
+	  //System.out.println("Right"+t.root.getRight().getData());
 	  
-	  
-	   
    }
       
 }
