@@ -1,12 +1,9 @@
 
 // File: TreeBag.java 
 
-// The implementation of most methods in this file is left as a student
-// exercise from Section 9.5 of "Data Structures and Other Objects Using Java"
-
 
 /******************************************************************************
-
+*@author Stryder R. Coleman and Roman Kozulia
 * An <CODE>TreeBag</CODE> is a collection of int numbers.
 *
 * <dl><dt><b>Limitations:</b> <dd>
@@ -36,41 +33,61 @@ public class TreeBag< E extends Comparable> implements Cloneable
  
 
    /**
-   * Insert a new element into this bag.
+   * Add a new element into this bag.
    * @param <CODE>element</CODE>
    *   the new element that is being inserted
    * <dt><b>Postcondition:</b><dd>
    *   A new copy of the element has been added to this bag.
    * @exception OutOfMemoryError
    *   Indicates insufficient memory a new BTNode.
+   * @note calls insert method when the tree is not empty 
    **/
    public void add(E element)
    
    {      
-	   BTNode node = new BTNode(element, null, null);
+	   BTNode node = new BTNode(element, null, null);   // create new node to insert 
    
-	   if(root ==null) {
+	   if(root ==null) {								// if tree is empty, make add new node as the root
 		  this.root = node;
 	   }else {
-		   insert(root,node);
-	   }
-	  
-      
+		   insert(root,node);							// otherwise, call insert method 
+	   } 
    }
-   private void insert(BTNode<E> parent, BTNode<E> child ) {
+   
+   /**
+    * Insert a new element into this bag.
+    * @param parent (root node) and child (node to insert)
+    *   the new element that is being inserted
+    * <dt><b>Postcondition:</b><dd>
+    *   A new copy of the element has been added to this bag.
+    * @exception OutOfMemoryError
+    *   Indicates insufficient memory a new BTNode.
+    * @note uses compareTo() method to compare elements. Methods calls itself 
+    * recursively until an empty spot is found.
+    **/
+   private void insert(BTNode<E> parent, BTNode<E> child ) 
+   {
 	   
-	   if((parent.getData()).compareTo(child.getData())>=0) {
-		   if(parent.getLeft()==null) {
-			   parent.setLeft(child);
-			   
-		   }else {
-			   insert(parent.getLeft(),child);
+	   if((parent.getData()).compareTo(child.getData())>0)
+	   {		// if root's name ASCII code > than child's
+		   if(parent.getLeft()==null) 
+		   {							    						// try to insert to the left
+			   parent.setLeft(child);							     
+		   }
+		   else 
+		   {														// if root already has left child, call the method 
+			   insert(parent.getLeft(),child);					    //recursively making its left child new root. 
 		   }	   
 		   
-	   }else{
-		   if(parent.getRight()==null) {
+	   }
+	   else
+	   {															// do the same algorithm if ASCII code < than child's
+		   if(parent.getRight()==null) 
+		   {
 			   parent.setRight(child);
-		   }else{
+		   }
+		   else
+		   {
 			   insert(parent.getRight(),child);
 		   }   
 	   }
@@ -78,8 +95,8 @@ public class TreeBag< E extends Comparable> implements Cloneable
 
    /**
    * Retrieve location of a specified element from this bag.
-   * @param <CODE>target</CODE>
-   *   the element to locate in the bag
+   * @param <CODE>target</CODE>, BTNode<E>root. 
+   * target - the element to locate in the bag
    * @return 
    *  the return value is a reference to the found element in the tree
    * <dt><b>Postcondition:</b><dd>
@@ -87,50 +104,27 @@ public class TreeBag< E extends Comparable> implements Cloneable
    *   a reference to a comparable element. If the target was not found then
    *   the method returns null.
    *   The bag remains unchanged.
+   *   @Note method uses recursion for search.
    **/
-   
+   //
    public E retrieveRecursively(BTNode<E>root,E target)
    {      
-	       if (root==null) 
+	       if (root==null) 										// if tree is empty - return null;
 	    	   return null;
 		   
-	       else if (root.getData().compareTo(target)==0) 
-		   
+	       else if (root.getData().compareTo(target)==0) 		// if  target's name ASCII code = than root's => object is 
+	    	   												    // found, return it. 
 			  return  root.getData();
 		 
-		   else if (root.getData().compareTo(target)>0) 
-			      
+		   else if (root.getData().compareTo(target)>0) 		// if  target's name ASCII code < than root's 
+			      												// call this method recursively with the root set to its left node 
 			  return  retrieveRecursively(root=root.getLeft(),target);
-		
-		   else		  
-			  return  retrieveRecursively(root=root.getRight(),target);	   
-	   
-	   }
-   
-   
-
-   public E retrieve(E target)
-   {      
-	   
-	   BTNode <E>currentNode= root;
-	   
-	   while (currentNode != null) {
-		   
-		   if (currentNode.getData().compareTo(target)==0) 
-		   
-			   return  currentNode.getData();
-		 
-		   if (currentNode.getData().compareTo(target)>0) 
-	  
-				   currentNode=currentNode.getLeft();
-		
-		   if (currentNode.getData().compareTo(target)<0) 
-			  
-				   currentNode=currentNode.getRight();
-			  
-	   }
-	   return null;
+	       														// if  target's name ASCII code > than root's 
+																// call this method recursively with the root set to its right node 
+		   else		  										   
+			  return  retrieveRecursively(root=root.getRight(),target);	  	   
    }
+   
    
    /**
    * Remove one copy of a specified element from this bag.
@@ -143,12 +137,13 @@ public class TreeBag< E extends Comparable> implements Cloneable
    **/
    public boolean remove(E target)
    {
-      BTNode<E>cursor= root;
+      BTNode<E>cursor= root;											// set temporary nodes: cursor, parentCursor
       BTNode<E>parentOfCursor=null;
-      
-      while(cursor!= null&&!(cursor.getData().compareTo(target)==0)) {
-    	  
-    	  if (cursor.getData().compareTo(target)>0) 
+      															    	// find node to remove. 
+      while(cursor!= null&&!(cursor.getData().compareTo(target)==0)) 
+      {																	// Move cursor to the left/ right node of the root depending 
+    	  																// on compare to evaluation.
+    	  if (cursor.getData().compareTo(target)>=0) 				    // loop stops when cursor == null or object is foud 
     	  {
     		  parentOfCursor = cursor;
     		  cursor = cursor.getLeft();
@@ -161,16 +156,16 @@ public class TreeBag< E extends Comparable> implements Cloneable
       
       }
       if(cursor == null) 
-      {					//target not found;
+      {												 //target not found;
     	  return false;
       }
       else if(cursor==root&&cursor.getLeft()==null)  // target is at the root, with no left child 
       {
-    	  root= root.getRight();
+    	  root= root.getRight();					 // make root's left node new root
     	  return true;
       }
-      else if(cursor.getLeft()==null) 				// target if not at the root, but has no left child 
-      {	 
+      else if(cursor.getLeft()==null) 				 // target if not at the root, but has no left child 
+      {	 											 // set parentOfCursor's  left/right child to cursor's right child
     	 if(parentOfCursor.getRight()==cursor)
     	 {
     		 parentOfCursor.setRight(cursor.getRight());    	
@@ -185,12 +180,11 @@ public class TreeBag< E extends Comparable> implements Cloneable
     	
       
       }
-      else if(cursor.getRight()!=null)
-      {
+      else if(cursor.getRight()!=null)							// if cursor has a right child, 
+      {															// set cursor to its left child's rightmost data.   	       									    			// remove cursor's left child's rightmost node. 
     	  cursor.setData(cursor.getLeft().getRightmostData());
     	  cursor.setLeft(cursor.getLeft().removeRightmost());
-    	  return true;
-    	  
+    	  return true; 
       }
   
         return false;
@@ -214,10 +208,9 @@ public class TreeBag< E extends Comparable> implements Cloneable
 	   }
 	   else 
 	   {
-		   root.inorderPrint();
+		   root.inorderPrint();					// use inheritor print to print in alphabetical order
 	   }
-      
-      
+
    } 
      
    /**
@@ -234,40 +227,8 @@ public class TreeBag< E extends Comparable> implements Cloneable
    public void displayAsTree() {
       root.print(0);
    }
-      
-   
-   
-   /**
-   * Generate a copy of this bag.
-   * @param - none
-   * @return
-   *   The return value is a copy of this bag. Subsequent changes to the
-   *   copy will not affect the original, nor vice versa. Note that the return
-   *   value must be type cast to an <CODE>TreeBag</CODE> before it can be used.
-   * @exception OutOfMemoryError
-   *   Indicates insufficient memory for creating the clone.
-   **/ 
-   public TreeBag<E> clone( )
-   {  // Clone an IntTreeBag object.
-      // Student will replace this return statement with their own code:
-      return null; 
-   } 
+  
 
-   /**
-   * Accessor method to count the number of occurrences of a particular element
-   * in this bag.
-   * @param <CODE>target</CODE>
-   *   the element that needs to be counted
-   * @return
-   *   the number of times that <CODE>target</CODE> occurs in this bag
-   **/
-   public int countOccurrences(E target)
-   {
-      // Student will replace this return statement with their own code:
-      return 0;
-   }
-   
-       
    /**
    * Determine the number of elements in this bag.
    * @param - none
@@ -277,104 +238,6 @@ public class TreeBag< E extends Comparable> implements Cloneable
    public int size( )
    {
       return BTNode.treeSize(root);
-   }
-
-
-
-
-   /**
-   * Add the contents of another bag to this bag.
-   * @param <CODE>addend</CODE>
-   *   a bag whose contents will be added to this bag
-   * <dt><b>Precondition:</b><dd>
-   *   The parameter, <CODE>addend</CODE>, is not null.
-   * <dt><b>Postcondition:</b><dd>
-   *   The elements from <CODE>addend</CODE> have been added to this bag.
-   * @exception IllegalArgumentException
-   *   Indicates that <CODE>addend</CODE> is null.
-   * @exception OutOfMemoryError
-   *   Indicates insufficient memory to increase the size of the bag.
-   **/
-   public void addAll(TreeBag<E> addend)
-   {
-      // Implemented by student.
-   }
-   
-   /**
-   * Create a new bag that contains all the elements from two other bags.
-   * @param <CODE>b1</CODE>
-   *   the first of two bags
-   * @param <CODE>b2</CODE>
-   *   the second of two bags
-   * <dt><b>Precondition:</b><dd>
-   *   Neither b1 nor b2 is null.
-   * @return
-   *   the union of b1 and b2
-   * @exception IllegalArgumentException
-   *   Indicates that one of the arguments is null.
-   * @exception OutOfMemoryError
-   *   Indicates insufficient memory for the new bag.
-   **/   
-   public static TreeBag union(TreeBag b1, TreeBag b2)
-   {
-      // Student will replace this return statement with their own code:
-      return null;
-   }
-   
-   public static<E> int numberOfNodes(BTNode<Golfer>source) {
-	   
-	   if(source==null) {
-		  return 0;
-	   }else {   
-		   return 1+numberOfNodes(source.getLeft()) +  numberOfNodes(source.getRight());
-		   
-	   }
-   }
-   
-   public static<E> int height(BTNode<E>source) {
-	 
-	   if(source==null) {
-		  return -1;
-	   }else { 		   
-		   int leftDepth = height(source.getLeft());
-		   int rightDepth = height(source.getRight());
-		   return 1+ Math.max(leftDepth, rightDepth);  
-	   }
-	   
-   }
-  
-   public static void main(String []args){
-	   
-	   TreeBag<Golfer> t = new TreeBag<Golfer>();
-	   Golfer g6 = new Golfer("b");
-	   Golfer g7 = new Golfer("b");
-	   Golfer g1 = new Golfer("c");
-	   Golfer g2 = new Golfer("a");
-	   Golfer g3 = new Golfer("d");
-	   Golfer g4 = new Golfer("s");
-	   Golfer g5 = new Golfer("b");
-	   Golfer g8 = new Golfer("f");
-	   Golfer g9 = new Golfer("h");
-	   t.add(g1);
-	   t.add(g2);
-	   t.add(g3);
-	   t.add(g4);
-	   t.add(g5);
-	   t.add(g6);
-	   t.add(g7);
-	   t.add(g8);
-	   t.add(g9);
-	
-	  Golfer g = new Golfer("f");
-	  t.display();
-	  //System.out.println(t.remove(g5));
-	   System.out.println(t.retrieveRecursively(t.root, g8));
-	   t.display();
-	  //System.out.println("Root"+t.root.getData());
-	  //System.out.println("Left"+t.root.getLeft().getData());
-	  //System.out.println("Right"+t.root.getRight().getData());
-	  
-   }
-      
+   }   
 }
            

@@ -1,116 +1,158 @@
+/**************
+*@author Stryder R. Coleman and Roman Kozulia
+*This is the class that the stores information about a golfer. 
+*It has fields lastName, numberOfRounds, averageScore, and handicap.
+*
 
-public class Golfer implements Comparable<Golfer> {
-	
-	private String lastname;
+**************/
+
+
+public class Golfer implements Comparable<Golfer> 
+{
+	// Invariant of the Golfer class:
+	//  1. Implements Comparable interface - must have compareTo() mehtod. 
+	//  2. Overrides compareTo method  in such a way that last names are compared by their ASCII values.
+	private String lastname;    
 	private int numberOfRounds;
 	private double averageScore;
 	private int handicap;
 	
-	
-	public Golfer(String lastname) {
+	// constructor which assigns lastName only
+	public Golfer(String lastname) 
+	{
 		this.lastname=lastname;
-		numberOfRounds=0;
-		averageScore=0;
-		handicap = 0;
 	}
 	
-
-	public Golfer(String lastname, int numberOfRounds, double averageScore, int handicap) {
+	// constructor which assigns all fields.
+	public Golfer(String lastname, int numberOfRounds, double averageScore, int handicap) 
+	{
 		this.lastname = lastname;
 		this.numberOfRounds = numberOfRounds;
 		this.averageScore = averageScore;
 		this.handicap = handicap;
 	}
+	/**
+	   * updates averageScore property.
+	   * @param double score.
+	   * @postcondition averageScore updated.
+	   * 
+	   **/
 
-
-
-
-	
-
-	public void addScore(double score ) {
-		
+	public void addScore(double score ) 
+	{	
 		averageScore = (numberOfRounds*averageScore+score)/++numberOfRounds;
-	
-	
 	}
-   
-	public String getLastname() {
+	/**
+	   * accessor for lastName field 
+	   * @param 
+	   *   none
+	   * @return lastName
+	   * 
+	   **/
+	public String getLastname() 
+	{
 		return lastname;
 	}
+	/**
+	   * modifier  for lastName field 
+	   * @param String lastName 
+	   * @return none
 
-	public void setLastname(String lastname) {
+	   **/
+	public void setLastname(String lastname)
+	{
 		this.lastname = lastname;
 	}
-
-	public int getNumberOfRounds() {
+	/**
+	   * accessor for numberOfRounds field 
+	   * @param 
+	   *   none
+	   * @return numberOfRounds
+	   * 
+	   **/
+	public int getNumberOfRounds() 
+	{
 		return numberOfRounds;
 	}
-
-	public void setNumberOfRounds(int numberOfRounds) {
+	/**
+	   * mutator for numberOfRounds field 
+	   * @param 
+	   *   int numberOfRounds
+	   * @return none
+	   * 
+	   **/
+	public void setNumberOfRounds(int numberOfRounds)
+	{
 		this.numberOfRounds = numberOfRounds;
 	}
-
-	public double getAverageScore() {
+	/**
+	   * accassor for averageScore field 
+	   * @param 
+	   *  none
+	   * @return averageScore;
+	   **/
+	public double getAverageScore() 
+	{
 		return averageScore;
 	}
-
-	public void setAverageScore(double averageScore) {
+	/**
+	   * mutator for averageScore field 
+	   * @param 
+	   *   int averageScore
+	   * @return none
+	   * 
+	   **/
+	public void setAverageScore(double averageScore) 
+	{
 		this.averageScore = averageScore;
 	}
-
-	public int getHandicap() {
+	/**
+	   * accassor for handicap field 
+	   * @param 
+	   *  none
+	   * @return handicap;
+	   **/
+	public int getHandicap() 
+	{
 		return handicap;
 	}
-
-	public void setHandicap(int handicap) {
+	/**
+	   * mutator for handicap field 
+	   * @param 
+	   *   int handicap
+	   * @return none
+	   * 
+	   **/
+	public void setHandicap(int handicap) 
+	{
 		this.handicap = handicap;
 	}
 
-
-
+	/**
+	   *Overrides toString method.
+	   * @param none
+	   * @return golfer's fields.
+	   * 
+	   **/
+    
 
 	@Override
-	public String toString() {
+	public String toString() 
+	{
 		return "Golfer lastname " + lastname + ", numberOfRounds= " + numberOfRounds + ", averageScore= " + averageScore
 				+ ", handicap= " + handicap;
 	}
-
+	/**
+	   *Overrides compareTo method.
+	   * @param Golfer object
+	   * @return integer which represents equality of comparable objects 
+	   * 
+	   **/
 	@Override
-	public int compareTo(Golfer o) {
-		
-		
+	public int compareTo(Golfer o) 
+	{
+		// Needs to be updated!!!
 		return this.lastname.substring(0,1).toLowerCase().compareTo(o.lastname.substring(0,1).toLowerCase());
-//	    int temp=0;
-//	    int size = this.lastname.length();
-//	    if(this.lastname.length()>o.lastname.length()) {
-//	    	this.lastname.length();
-//	    }
-//	    
-//	    for(int i=0; i<size;i++) {
-//	    	
-//	    	if (i==--size) {
-//	    		temp= this.lastname.substring(i, i++).toLowerCase().compareTo(o.lastname.substring(i, i++).toLowerCase());
-//	    		if(temp==0) {
-//	    			if(this.lastname.length()==o.lastname.length()) {
-//	    				return -1;
-//	    			}else {
-//	    				return 1;
-//	    			}
-//	    		}
-//	    	}
-//	    		
-//	    	else {
-//	    		temp= this.lastname.substring(i).toLowerCase().compareTo(o.lastname.substring(i).toLowerCase());
-//	    	}
-//	    	if(temp!=0)
-//	    		return temp;
-//	    }
-//	    	
-//	    
-//	    
-//	    
-//	    
-//		return temp ;
 	}
 
 	
