@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 // File: TreeBag.java 
 
@@ -238,6 +241,68 @@ public class TreeBag< E extends Comparable> implements Cloneable
    public int size( )
    {
       return BTNode.treeSize(root);
-   }   
+   }
+   /**
+    * Writes data into  a given file. Calls the helper method Out text 
+    * @param - none
+    * @exception IllegalStateException when tree is empty
+    * @return none 
+    *   
+    **/     
+   public void output(){
+	   if (root == null) 
+		   {
+			   throw new IllegalStateException ("Tree is empty");
+		   }
+		   else 
+		   {
+	         File file = new File("E:\\Csc103\\Projects\\Project Four\\Unfinished\\Project-Four\\src\\golferinfo.txt");
+	         try{
+	            PrintWriter writer = new PrintWriter(file);
+			      OutText(file, writer,root);
+	            writer.close();
+		      }catch(FileNotFoundException e){
+	            System.out.println("File was not found");
+	      }catch(Exception e){
+	            System.out.println("File was not found");
+	      }
+	      }
+	      
+
+	   
+	   } 
+   /**
+    * Helper method  which recursively calls itself printing the tree into a file.
+    * Uses inorder print
+    * @param - File file, PrintWriter writer, BTNOde r 
+    * @exception Exception 
+    * @return none 
+    *   
+    **/   
+	   public static void OutText(java.io.File file, java.io.PrintWriter writer, BTNode r)
+	   {
+	   
+	   if (r.getLeft() != null)
+	   {
+	         try
+	         {
+	   		      OutText(file, writer, r.getLeft());
+	         }
+	         catch(Exception e){
+	               System.out.println("Left error");
+	         }
+	      }
+	      writer.println(r.getData());
+	      if (r.getRight() != null)
+	      {
+	         try
+	         {
+	   		      OutText(file, writer, r.getRight());
+	         }
+	         catch(Exception e){
+	               System.out.println("Right error");
+	         }
+	      }
+	   }      
 }
            
